@@ -5,6 +5,7 @@ import (
 	"github.com/nitesh-mhatre/go-rest-api/models"
 	"net/http"
 	"github.com/nitesh-mhatre/go-rest-api/db"
+	"strconv"
 
 )
 
@@ -15,8 +16,26 @@ func main() {
 	r := gin.Default()
 	r.GET("/events", getEvents)
 	r.POST("/events",createEvent)
+	r.GET("/events/:id", getEvent)
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
+
+func getEvent(c *gin.Context){
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid event ID"})
+		return
+	}
+
+	event, err := models.GetEventByID(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+	c.JSON(http.StatusOK, event)
+
+}
+
 
 func getEvents(c *gin.Context){
 	events, err := models.GetAllEvents()
