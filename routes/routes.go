@@ -11,5 +11,6 @@ func ResgisterRoutes(r *gin.Engine) {
 	r.PUT("/events/:id", updateEvent)
 	r.DELETE("/events/:id", deleteEvent)
 	r.POST("/users", createUser)
+	r.POST("/login", loginUser)
 }
 

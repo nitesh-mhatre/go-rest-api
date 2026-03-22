@@ -9,7 +9,7 @@ import (
 func createUser(c *gin.Context){
 	var user models.User
 
-	
+
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -24,4 +24,27 @@ func createUser(c *gin.Context){
 	c.JSON(http.StatusCreated, user)
 
 }
+
+func loginUser(c *gin.Context){
+	var user models.User
+	
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	existingUser, err := models.GetUserByUsername(user.Username)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		return
+	}
+
+	if !models.CheckPasswordHash(user.Password, existingUser.Password) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+}
+	
 
