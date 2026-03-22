@@ -1,5 +1,7 @@
 package models
 
+import "github.com/nitesh-mhatre/go-rest-api/db"
+
 
 type Event struct {
 	ID int 
