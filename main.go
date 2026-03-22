@@ -4,10 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nitesh-mhatre/go-rest-api/models"
 	"net/http"
+	"github.com/nitesh-mhatre/go-rest-api/db"
 
 )
 
 func main() {
+	if err := db.InitDB(); err != nil {
+		panic(err)
+	}
 	r := gin.Default()
 	r.GET("/events", getEvents)
 	r.POST("/events",createEvent)
@@ -33,3 +37,6 @@ func createEvent(c *gin.Context){
 	c.JSON(http.StatusCreated, event)
 
 }
+
+
+
