@@ -10,7 +10,7 @@ const SecretKey = "AVSJDSLDMDLydshbdjgdjjdhgkshsuesuwpowpMDMJOUHGSOILJSAJAIJPAJP
 func GenerateJWT(username string) (string, error) {
 	claims := jwt.MapClaims{
 		"username": username,
-		"exp":   time.Now().Add(time.Hour * 2),   //jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // Token expires in 24 hours
+		"exp":      jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -30,7 +30,10 @@ func ValidateJWT(tokenString string) (string, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		username := claims["username"].(string)
+		username, ok := claims["username"].(string)
+		if !ok {
+			return "", jwt.ErrInvalidKey
+		}
 		return username, nil
 	} else {
 		return "", jwt.ErrInvalidKey

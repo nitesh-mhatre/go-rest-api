@@ -4,12 +4,12 @@ import "github.com/nitesh-mhatre/go-rest-api/db"
 
 
 type Event struct {
-	ID int 
-	Name string `binding:"required"`
-	Description string `binding:"required"`
-	Location string `binding:"required"`
-	DateTime string `binding:"required"`
-	UserID int
+    ID          int    `json:"id"`
+    Name        string `json:"name" binding:"required"`
+    Description string `json:"description" binding:"required"`
+    Location    string `json:"location" binding:"required"`
+    DateTime    string `json:"date_time" binding:"required"`
+    UserID      int    `json:"user_id"`
 }
 
 var events []Event = []Event{
