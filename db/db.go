@@ -22,15 +22,33 @@ func InitDB() error {
 
 
 func createTable() error {
-	quary := `CREATE TABLE IF NOT EXISTS events (
+
+	user_table_quary := `CREATE TABLE IF NOT EXISTS users (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL)`
+
+	_, err := DB.Exec(user_table_quary)
+	
+	if err != nil {
+		return err
+	}
+
+	events_table_quary := `CREATE TABLE IF NOT EXISTS events (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
 		description TEXT NOT NULL,
 		location TEXT NOT NULL,
 		date_time TEXT NOT NULL,
-		user_id INTEGER
+		user_id INTEGER,
+		FOREIGN KEY (user_id) REFERENCES users(id)
 	)`
 
-	_, err := DB.Exec(quary)
-	return err
+	_, err = DB.Exec(events_table_quary)
+	
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
